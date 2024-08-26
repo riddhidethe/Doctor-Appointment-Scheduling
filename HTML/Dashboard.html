@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        .main {
+            position: absolute;
+            top: 60px;
+            width: calc(100% - 100px);
+            left: 30px;
+            min-height: calc(100vh - 60px);
+            background: whitesmoke;
+        }
+
+        .cards {
+            width: 98%;
+            padding: 35px 10px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .cards .card {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 7px 25px 0 rgba(0, 0, 0, 0.08);
+        }
+
+        .number {
+            font-size: 35px;
+            font-weight: 500;
+            color: #299863
+        }
+
+        .card-name{
+            color:#888;
+            font-weight: 600;
+        }
+
+        .icon-box i{
+            font-size: 45px;
+            color: #299863
+        }
+        
+        .charts {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 60px;
+            width: 94%;
+            padding: 20px;
+            padding-top: 0;
+        }
+
+        .chart{
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 7px 25px rgba(0,0,0,0.08);
+            width: 100%;
+        }
+
+        .chart canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        #doughnut {
+            display: none;
+        }
+        @media (max-width:11115px) {
+            .main{
+                left: 50px;
+                width: calc(100% - 100px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main">
+            <div class="cards">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="number">10,345</div>
+                        <div class="'card-name">No. of Patients</div>
+                    </div>
+                    <div class="icon-box">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="number">45 years</div>
+                        <div class="'card-name">Average age</div>
+                    </div>
+                    <div class="icon-box">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="number">Hyper-tension</div>
+                        <div class="'card-name">Most Common Disease</div>
+                    </div>
+                    <div class="icon-box">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="number">75%</div>
+                        <div class="'card-name">Patient Recovery Rate</div>
+                    </div>
+                    <div class="icon-box">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="charts">
+                <div class="chart">
+                    <h2>Annual Analysis</h2>
+                    <canvas id="lineChart"></canvas>
+                </div>
+                <div class="chart" id="doughnut-chart">
+                    <h2>Area wise Patient Analysis</h2>
+                    <canvas id="doughnut"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="chart1.js"></script>
+    <script src="chart2.js"></script>
+</body>
+</html>

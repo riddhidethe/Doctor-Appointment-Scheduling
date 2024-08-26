@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Booking System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .container {
+            display: flex;
+            width: 80%;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .doctor-profile {
+            flex: 1;
+            padding: 20px;
+            border-right: 1px solid #dddddd;
+        }
+        .doctor-profile img {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+        }
+        .doctor-info {
+            margin-top: 20px;
+        }
+        .doctor-info h2 {
+            margin: 0;
+        }
+        .doctor-info p {
+            margin: 10px 0;
+        }
+        .booking-form {
+            flex: 1;
+            padding: 20px;
+        }
+        .booking-form h2 {
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group select,
+        .form-group input[type="submit"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+        }
+        .form-group input[type="submit"] {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .modal-content .tick {
+            font-size: 50px;
+            color: #007bff;
+        }
+        .modal-content .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="doctor-profile">
+            <img src="/Assets/akan.jpg" alt="Doctor Photo">
+            <div class="doctor-info">
+                <h2>Dr. Akanksha Patil</h2>
+                <p><strong>Specialty:</strong> Cardiologist</p>
+                <p><strong>Experience:</strong> 10 years</p>
+                <p><strong>About:</strong> Dr. Akanksha Patil is a renowned cardiologist with over 10 years of experience in treating heart-related ailments. She has a successful track record and is known for her compassionate approach towards patients.</p>
+            </div>
+        </div>
+        <div class="booking-form">
+            <h2>Book an Appointment</h2>
+            <form id="booking-form">
+                <div class="form-group">
+                    <label for="date">Select Date:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="timeSlot">Time Slot:</label>
+                    <select name="timeSlot" required>
+                        <option value="">Select a time slot</option>
+                        <option value="09:00-10:00">09:00-10:00</option>
+                        <option value="10:00-11:00">10:00-11:00</option>
+                        <option value="11:00-12:00">11:00-12:00</option>
+                        <option value="1:00-2:00">1:00-2:00</option>
+                        <option value="2:00-3:00">2:00-3:00</option>
+                        <option value="3:00-4:00">3:00-4:00</option>
+                        <option value="4:00-5:00">4:00-5:00</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reason">Reason for Appointment:</label>
+                    <textarea id="reason" name="reason" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Book Appointment">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <div class="tick">&#10004;</div>
+            <p id="modal-message"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('booking-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const bookingData = {
+                date: formData.get('date'),
+                timeSlot: formData.get('timeSlot'),
+                reason: formData.get('reason')
+            };
+
+            fetch('/practice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bookingData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const modalMessage = document.getElementById('modal-message');
+                const tick = document.querySelector('.tick');
+
+                if (data.success) {
+                    modalMessage.textContent = 'Appointment booked successfully!';
+                    modalMessage.classList.remove('error');
+                    tick.style.display = 'block';
+                } else {
+                    modalMessage.textContent = data.error || 'Error booking appointment. Please try again.';
+                    modalMessage.classList.add('error');
+                    tick.style.display = 'none';
+                }
+
+                document.getElementById('booking-modal').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('booking-modal').style.display = 'none';
+                }, 3000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const modalMessage = document.getElementById('modal-message');
+                modalMessage.textContent = 'Error booking appointment. Please try again.';
+                modalMessage.classList.add('error');
+                document.getElementById('booking-modal').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('booking-modal').style.display = 'none';
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>
